@@ -1709,6 +1709,22 @@
       render();
     }
 
+    function setupGuestConnectionHandlers(conn) {
+      conn.on('data', (data) => {
+        handleGuestReceivedMessage(data);
+      });
+      
+      conn.on('close', () => {
+        console.log("Guest data channel closed by Host.");
+        handleGuestDisconnect();
+      });
+      
+      conn.on('error', (err) => {
+        console.error("Guest data channel error:", err);
+        handleGuestDisconnect();
+      });
+    }
+
     // --- Guest-Side Message Handlers ---
     function handleGuestReceivedMessage(message) {
       switch (message.type) {
