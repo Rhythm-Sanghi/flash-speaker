@@ -1854,11 +1854,7 @@
         html5QrScannerInstance.start(
           { facingMode: "environment" },
           {
-            fps: 15,
-            qrbox: (width, height) => {
-              const size = Math.min(width, height) * 0.75;
-              return { width: size, height: size };
-            }
+            fps: 15
           },
           (decodedText) => {
             console.log("Headless QR Scan Success:", decodedText);
