@@ -1633,6 +1633,10 @@
       console.log(`First-time join attempt ${appState.firstTimeJoinAttempts + 1}/3...`);
       
       const conn = appState.peer.connect(appState.hostId);
+      appState.guestConn = conn;
+      
+      // Register listeners immediately before channel opens to capture early data payloads
+      setupGuestConnectionHandlers(conn);
       
       let connTimeout = setTimeout(() => {
         if (!appState.hasJoinedSession) {
@@ -1644,11 +1648,6 @@
       
       conn.on('open', () => {
         clearTimeout(connTimeout);
-        // hasJoinedSession is false initially.
-        // It transitions to true only after NTP clock offset sync completes (inside calculateFinalClockOffset)
-        appState.guestConn = conn;
-        
-        setupGuestConnectionHandlers(conn);
         showView('guestScreen');
         render();
         
@@ -1733,6 +1732,10 @@
     function reconnectDataChannel() {
       console.log("Re-establishing data channel to Host ID:", appState.hostId);
       const conn = appState.peer.connect(appState.hostId);
+      appState.guestConn = conn;
+      
+      // Register handlers immediately to prevent race conditions
+      setupGuestConnectionHandlers(conn);
       
       let connectTimeout = setTimeout(() => {
         conn.close();
@@ -1744,11 +1747,9 @@
         console.log("WebRTC Data Connection recovered!");
         isReconnecting = false;
         appState.connectionState = 'connected';
-        appState.guestConn = conn;
         reconnectBackoff = 1000;
         
         document.getElementById('reconnectingOverlay').classList.add('hidden');
-        setupGuestConnectionHandlers(conn);
         showView('guestScreen');
         render();
         
@@ -1821,6 +1822,10 @@
       
       appState.role = 'guest';
       appState.hostId = code;
+      
+      // Update URL to match QR code URL structure so state is exactly identical!
+      const newUrl = `${window.location.origin}${window.location.pathname}?room=${code}`;
+      window.history.pushState({ room: code }, document.title, newUrl);
       
       const span = document.getElementById('joinRoomCodeSpan');
       if (span) span.innerText = code;
