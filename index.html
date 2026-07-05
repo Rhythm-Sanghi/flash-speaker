@@ -1725,6 +1725,105 @@
       });
     }
 
+    function handleGuestAudioMeta(message) {
+      console.log("Incoming audio transfer metadata:", message);
+      appState.hostCurrentTrackId = message.trackId;
+      appState.hostCurrentTrackName = message.name;
+      appState.hostCurrentTrackSize = message.size;
+      appState.totalChunks = message.totalChunks;
+      
+      appState.receivedChunks = new Array(message.totalChunks);
+      appState.receivedChunksCount = 0;
+      appState.receivedBytes = 0;
+      appState.guestState = 'transferring';
+      appState.transferProgress = 0;
+      render();
+    }
+
+    function handleGuestAudioChunk(message) {
+      if (appState.guestState !== 'transferring' || !appState.receivedChunks) {
+        console.warn("Received audio chunk outside of transfer mode.");
+        return;
+      }
+      
+      const index = message.index;
+      const chunk = message.chunk;
+      
+      if (index >= 0 && index < appState.totalChunks && !appState.receivedChunks[index]) {
+        appState.receivedChunks[index] = chunk;
+        appState.receivedChunksCount++;
+        appState.receivedBytes += chunk.byteLength;
+        
+        appState.transferProgress = Math.round((appState.receivedChunksCount / appState.totalChunks) * 100);
+        
+        if (appState.receivedChunksCount % 10 === 0 || appState.receivedChunksCount === appState.totalChunks) {
+          render();
+        }
+      }
+    }
+
+    async function handleGuestAudioDone() {
+      if (appState.guestState !== 'transferring' || !appState.receivedChunks) return;
+      
+      console.log("Audio chunks transfer complete. Verifying integrity...");
+      render();
+      
+      let totalLength = 0;
+      for (const chunk of appState.receivedChunks) {
+        if (chunk) totalLength += chunk.byteLength;
+      }
+      
+      if (totalLength === 0) {
+        console.error("Transferred audio contains zero bytes.");
+        showToast("Audio download failed. Requesting retry...", "error");
+        appState.guestConn.send({ type: 'request-audio-retry' });
+        return;
+      }
+      
+      const fileBuffer = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const chunk of appState.receivedChunks) {
+        if (chunk) {
+          fileBuffer.set(new Uint8Array(chunk), offset);
+          offset += chunk.byteLength;
+        }
+      }
+      
+      showToast("Audio download complete! Decoding track...", "info");
+      
+      try {
+        if (!appState.audioCtx) {
+          appState.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        const audioBuffer = await appState.audioCtx.decodeAudioData(fileBuffer.buffer.slice(0));
+        appState.audioBuffer = audioBuffer;
+        appState.trackId = appState.hostCurrentTrackId;
+        appState.trackName = appState.hostCurrentTrackName;
+        appState.trackSize = totalLength;
+        
+        appState.guestState = 'ready';
+        render();
+        showToast("Audio decoded successfully!", "success");
+        
+        appState.guestConn.send({
+          type: 'audio-ready',
+          trackId: appState.trackId
+        });
+      } catch (err) {
+        console.error("Failed to decode audio file:", err);
+        appState.decodeAttempts++;
+        if (appState.decodeAttempts < 3) {
+          showToast("Audio decode failed. Requesting retry...", "error");
+          appState.guestConn.send({ type: 'request-audio-retry' });
+        } else {
+          showToast("Audio decode failed repeatedly. Re-initializing...", "error");
+          appState.guestState = 'error';
+          render();
+        }
+      }
+    }
+
     // --- Guest-Side Message Handlers ---
     function handleGuestReceivedMessage(message) {
       switch (message.type) {
