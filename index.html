@@ -1211,7 +1211,7 @@
     }
 
     function setupHostConnectionHandlers(conn, guest) {
-      conn.on('open', () => {
+      const handleOpen = () => {
         console.log(`WebRTC channel open with: ${guest.peerId}`);
         conn.send({
           type: 'init-handshake',
@@ -1222,7 +1222,13 @@
           currentTrackSize: appState.trackSize,
           isPlaying: appState.isPlaying
         });
-      });
+      };
+
+      if (conn.open) {
+        handleOpen();
+      } else {
+        conn.on('open', handleOpen);
+      }
       
       conn.on('data', (data) => {
         handleHostReceivedMessage(guest, data);
@@ -1572,7 +1578,7 @@
           conn.close();
           handleFirstTimeJoinFailure();
         }
-      }, 5000);
+      }, 10000);
       
       conn.on('open', () => {
         clearTimeout(connTimeout);
