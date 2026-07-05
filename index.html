@@ -536,6 +536,7 @@
             <li>The host transmission console has shut down.</li>
             <li>The broadcast frequency room code has expired.</li>
             <li>Network NAT boundaries blocked traversal.</li>
+            <li id="errorDiagnosticText" class="text-analog-amber font-bold">Error details: Awaiting diagnostic report.</li>
           </ul>
         </div>
 
@@ -749,10 +750,7 @@
       const room = urlParams.get('room');
 
       if (room) {
-        appState.role = 'guest';
-        appState.hostId = room.toUpperCase();
-        document.getElementById('joinRoomCodeSpan').innerText = appState.hostId;
-        showView('guestJoinScreen');
+        becomeGuest(room.toUpperCase());
       } else {
         appState.role = 'host';
         showView('setupScreen');
@@ -1136,7 +1134,7 @@
       
       appState.peer = new Peer(targetRoomId, {
         config: { iceServers: ICE_SERVERS },
-        debug: 1
+        debug: 3
       });
       
       appState.peer.on('open', (id) => {
@@ -1606,7 +1604,7 @@
       
       appState.peer = new Peer({
         config: { iceServers: ICE_SERVERS },
-        debug: 1
+        debug: 3
       });
       
       appState.peer.on('open', (id) => {
@@ -1621,6 +1619,10 @@
       
       appState.peer.on('error', (err) => {
         console.error("Guest PeerJS error:", err);
+        const errText = document.getElementById('errorDiagnosticText');
+        if (errText) {
+          errText.innerText = `Error details: ${err.type} - ${err.message || 'No message'}`;
+        }
         if (!appState.hasJoinedSession) {
           handleFirstTimeJoinFailure();
         } else {
@@ -1811,15 +1813,7 @@
       render();
     }
 
-    function guestManualJoin() {
-      const codeInput = document.getElementById('manualRoomCodeInput');
-      if (!codeInput) return;
-      const code = codeInput.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-      if (code.length !== 6) {
-        showToast("Invalid Room Code. Must be exactly 6 characters.", "error");
-        return;
-      }
-      
+    function becomeGuest(code) {
       appState.role = 'guest';
       appState.hostId = code;
       
@@ -1832,6 +1826,17 @@
       
       showView('guestJoinScreen');
       render();
+    }
+
+    function guestManualJoin() {
+      const codeInput = document.getElementById('manualRoomCodeInput');
+      if (!codeInput) return;
+      const code = codeInput.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+      if (code.length !== 6) {
+        showToast("Invalid Room Code. Must be exactly 6 characters.", "error");
+        return;
+      }
+      becomeGuest(code);
     }
 
     function cancelGuestJoinSequence() {
