@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WebRTC / TURN Diagnostic</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #0b0d10; color: #e8e8e8; padding: 20px; max-width: 700px; margin: 0 auto; }
+  h1 { font-size: 18px; }
+  .row { margin: 12px 0; padding: 12px; background: #16181d; border-radius: 8px; border: 1px solid #2a2d33; }
+  .ok { color: #4ade80; font-weight: bold; }
+  .bad { color: #f87171; font-weight: bold; }
+  .warn { color: #fbbf24; font-weight: bold; }
+  code { background: #000; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  input, button { font-size: 14px; padding: 8px; border-radius: 6px; border: 1px solid #444; background: #222; color: #eee; }
+  button { cursor: pointer; background: #E8A548; color: #000; font-weight: bold; border: none; }
+  #log { white-space: pre-wrap; font-family: monospace; font-size: 12px; background: #000; padding: 10px; border-radius: 6px; max-height: 300px; overflow-y: auto; }
+</style>
+</head>
+<body>
+  <h1>WebRTC / TURN Diagnostic</h1>
+  <p>This page tests ONLY whether your TURN/STUN config actually produces relay candidates and whether two peers can connect - nothing else. No audio, no NTP, no app logic.</p>
+
+  <div class="row">
+    <strong>Step 1 - This device</strong><br>
+    My Peer ID: <code id="myId">generating...</code><br>
+    <span id="peerStatus">connecting to broker...</span>
+  </div>
+
+  <div class="row">
+    <strong>Step 2 - Connect to the other device</strong><br>
+    Enter the OTHER device's Peer ID (shown above on that device):<br>
+    <input id="targetId" placeholder="e.g. ABC123" style="width: 200px;">
+    <button onclick="connectToPeer()">Connect</button>
+  </div>
+
+  <div class="row">
+    <strong>Result</strong><br>
+    <div id="result">Waiting for a connection attempt...</div>
+  </div>
+
+  <div class="row">
+    <strong>Raw log</strong>
+    <div id="log"></div>
+  </div>
+
+<script>
+const ICE_SERVERS = [
+  { urls: 'stun:stun.l.google.com:19302' },
+  { urls: 'stun:global.stun.twilio.com:3478' },
+  { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+  { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+  { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+];
+
+function log(msg) {
+  const el = document.getElementById('log');
+  el.textContent += msg + '\n';
+  el.scrollTop = el.scrollHeight;
+}
+
+log('ICE config being used:\n' + JSON.stringify(ICE_SERVERS, null, 2));
+
+const peer = new Peer(undefined, { config: { iceServers: ICE_SERVERS } });
+
+peer.on('open', id => {
+  document.getElementById('myId').textContent = id;
+  document.getElementById('peerStatus').innerHTML = '<span class="ok">Connected to signaling broker.</span>';
+  log('My peer ID: ' + id);
+});
+
+peer.on('error', err => {
+  document.getElementById('peerStatus').innerHTML = '<span class="bad">Broker error: ' + err.type + '</span>';
+  log('Peer error: ' + err.type + ' - ' + err.message);
+});
+
+function inspectConnection(conn, label) {
+  const pc = conn.peerConnection;
+  let sawRelay = false, sawSrflx = false, sawHost = false;
+  const resultEl = document.getElementById('result');
+
+  pc.addEventListener('icecandidate', e => {
+    if (e.candidate) {
+      const c = e.candidate.candidate;
+      log(label + ' local candidate: ' + c);
+      if (c.includes('typ relay')) sawRelay = true;
+      if (c.includes('typ srflx')) sawSrflx = true;
+      if (c.includes('typ host')) sawHost = true;
+    }
+  });
+
+  pc.addEventListener('icecandidateerror', e => {
+    log(label + ' ICE CANDIDATE ERROR: code=' + e.errorCode + ' text=' + e.errorText + ' url=' + e.url);
+  });
+
+  pc.addEventListener('iceconnectionstatechange', () => {
+    log(label + ' ICE state: ' + pc.iceConnectionState);
+
+    if (pc.iceConnectionState === 'connected' || pc.iceConnectionState === 'completed') {
+      resultEl.innerHTML = '<span class="ok">SUCCESS - peers connected.</span><br>' +
+        'Relay candidate seen: ' + (sawRelay ? '<span class="ok">YES</span>' : '<span class="warn">no (connected via host/srflx instead - fine on same network, but will not help across carriers)</span>');
+    }
+
+    if (pc.iceConnectionState === 'failed') {
+      let diagnosis = '';
+      if (!sawRelay && !sawSrflx) {
+        diagnosis = 'No STUN or TURN candidates were ever gathered. The iceServers config is not reaching the RTCPeerConnection at all.';
+      } else if (!sawRelay && sawSrflx) {
+        diagnosis = 'STUN worked (srflx candidates exist) but NO relay candidate was ever produced. TURN is not authenticating - check the icecandidateerror log lines above for the exact error code/text from the TURN server.';
+      } else if (sawRelay) {
+        diagnosis = 'A relay candidate WAS produced, but the connection still failed. This usually means the TURN server itself is unreachable or overloaded, or a firewall is blocking the specific port/protocol.';
+      }
+      resultEl.innerHTML = '<span class="bad">FAILED.</span><br>' + diagnosis;
+    }
+  });
+}
+
+window.connectToPeer = function() {
+  const targetId = document.getElementById('targetId').value.trim();
+  if (!targetId) return;
+  log('Attempting to connect to: ' + targetId);
+  const conn = peer.connect(targetId, { serialization: 'binary' });
+  inspectConnection(conn, '[Caller]');
+  conn.on('open', () => log('Data channel opened successfully!'));
+};
+
+peer.on('connection', conn => {
+  log('Incoming connection from: ' + conn.peer);
+  inspectConnection(conn, '[Receiver]');
+  conn.on('open', () => log('Data channel opened successfully!'));
+});
+</script>
+</body>
+</html>
