@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -45,12 +45,26 @@
   </div>
 
 <script>
+// ── HOW TO GET FREE TURN CREDENTIALS ───────────────────────────────────────
+// openrelay.metered.ca (openrelayproject) is a public demo that is heavily
+// abused and routinely unreachable (error 701 = server didn't respond).
+//
+// Fix: get your own FREE credentials from metered.ca (100 GB/month, no CC):
+//   1. Sign up at https://dashboard.metered.ca/signup
+//   2. Create an app → open the "TURN Server Credentials" tab
+//   3. Copy your hostname, username, and credential into the constants below
+// ───────────────────────────────────────────────────────────────────────────
+const MY_TURN_HOST = 'YOUR_APP.relay.metered.ca'; // e.g. myapp.relay.metered.ca
+const MY_TURN_USER = 'YOUR_USERNAME';
+const MY_TURN_PASS = 'YOUR_CREDENTIAL';
+
 const ICE_SERVERS = [
   { urls: 'stun:stun.l.google.com:19302' },
-  { urls: 'stun:global.stun.twilio.com:3478' },
-  { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-  { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
-  { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+  { urls: 'stun:stun1.l.google.com:19302' },
+  { urls: `turn:${MY_TURN_HOST}:80?transport=udp`,   username: MY_TURN_USER, credential: MY_TURN_PASS },
+  { urls: `turn:${MY_TURN_HOST}:443?transport=udp`,  username: MY_TURN_USER, credential: MY_TURN_PASS },
+  { urls: `turn:${MY_TURN_HOST}:443?transport=tcp`,  username: MY_TURN_USER, credential: MY_TURN_PASS },
+  { urls: `turns:${MY_TURN_HOST}:443?transport=tcp`, username: MY_TURN_USER, credential: MY_TURN_PASS },
 ];
 
 function log(msg) {
