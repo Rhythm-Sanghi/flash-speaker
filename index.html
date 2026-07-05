@@ -1632,10 +1632,7 @@
     function attemptFirstTimeConnect() {
       console.log(`First-time join attempt ${appState.firstTimeJoinAttempts + 1}/3...`);
       
-      const conn = appState.peer.connect(appState.hostId, {
-        serialization: 'binary',
-        reliable: true
-      });
+      const conn = appState.peer.connect(appState.hostId);
       
       let connTimeout = setTimeout(() => {
         if (!appState.hasJoinedSession) {
@@ -1735,10 +1732,7 @@
 
     function reconnectDataChannel() {
       console.log("Re-establishing data channel to Host ID:", appState.hostId);
-      const conn = appState.peer.connect(appState.hostId, {
-        serialization: 'binary',
-        reliable: true
-      });
+      const conn = appState.peer.connect(appState.hostId);
       
       let connectTimeout = setTimeout(() => {
         conn.close();
