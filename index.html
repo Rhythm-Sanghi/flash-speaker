@@ -246,6 +246,24 @@
         <button id="createRoomBtn" onclick="hostCreateRoom()" disabled class="w-full bg-analog-panel text-analog-muted border border-analog-border py-3.5 px-4 rounded font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 font-sans text-xs cursor-not-allowed uppercase tracking-wider">
           Select Audio to Initialize
         </button>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-3 my-1 shrink-0">
+          <div class="h-[1px] bg-analog-border flex-1"></div>
+          <span class="text-[9px] font-bold text-analog-muted uppercase tracking-widest font-sans">OR</span>
+          <div class="h-[1px] bg-analog-border flex-1"></div>
+        </div>
+
+        <!-- Manual Guest Connect Section -->
+        <div class="flex flex-col gap-2">
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted font-sans">Guest Receiver Mode</label>
+          <div class="flex gap-2">
+            <input type="text" id="manualRoomCodeInput" maxlength="6" placeholder="Enter 6-char Room Code" class="flex-1 min-w-0 bg-analog-ink border border-analog-border rounded px-3 py-2.5 text-xs text-analog-cream placeholder-analog-muted/40 uppercase font-bold tracking-wider focus:outline-none focus:border-analog-amber transition-colors font-display">
+            <button onclick="guestManualJoin()" class="bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream px-4 rounded text-xs font-bold transition-colors font-sans uppercase tracking-wider shrink-0">
+              Join
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -388,6 +406,10 @@
 
         <button onclick="startGuestJoiningSequence()" class="w-full bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-4 px-6 rounded transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 text-xs font-sans uppercase tracking-wider">
           Connect & Synchronize
+        </button>
+        
+        <button onclick="cancelGuestJoinSequence()" class="w-full bg-transparent hover:bg-analog-border border border-analog-border hover:border-analog-amber text-analog-muted hover:text-analog-amber font-bold py-2.5 px-6 rounded transition-all flex items-center justify-center gap-2 text-[10px] font-sans uppercase tracking-wider">
+          Cancel & Return
         </button>
         
         <p class="text-[9px] text-analog-muted text-center leading-normal font-sans">Establishes peer context, opens WebRTC data channels, and initiates NTP round pings to align audio phase within microsecond thresholds.</p>
@@ -1705,6 +1727,33 @@
       
       window.history.pushState({}, document.title, window.location.pathname);
       
+      showView('setupScreen');
+      render();
+    }
+
+    function guestManualJoin() {
+      const codeInput = document.getElementById('manualRoomCodeInput');
+      if (!codeInput) return;
+      const code = codeInput.value.trim().toUpperCase();
+      if (code.length !== 6) {
+        showToast("Invalid Room Code. Must be exactly 6 characters.", "error");
+        return;
+      }
+      
+      appState.role = 'guest';
+      appState.hostId = code;
+      
+      const span = document.getElementById('joinRoomCodeSpan');
+      if (span) span.innerText = code;
+      
+      showView('guestJoinScreen');
+      render();
+    }
+
+    function cancelGuestJoinSequence() {
+      appState.role = 'host';
+      appState.hostId = null;
+      window.history.pushState({}, document.title, window.location.pathname);
       showView('setupScreen');
       render();
     }
