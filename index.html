@@ -14,7 +14,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
   <!-- Inline Web App Manifest Data URI for Installability -->
   <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRmxhc2gtU3BlYWtlciIsInNob3J0X25hbWUiOiJGbGFzaFNwZWFrZXIiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzEyMTMxNiIsInRoZW1lX2NvbG9yIjoiIzEyMTMxNiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7dXRmOCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDI0IDI0JyB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5Mic+PHBhdGggc3Ryb2tlPSclMjNFOEE1NDgnIHN0cm9rZS13aWR0aD0nMicgZmlsbD0nbm9uZScgZD0nTTQgMTJoMmwyLTUgMyAxMCAyLTcgMSA0aDYnLz48L3N2Zz4iLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
@@ -127,8 +127,9 @@
             }
           },
           fontFamily: {
-            display: ['"Share Tech Mono"', 'monospace'],
+            display: ['"Outfit"', 'sans-serif'],
             sans: ['"Inter"', 'sans-serif'],
+            mono: ['"Share Tech Mono"', 'monospace'],
           },
           animation: {
             'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -138,64 +139,62 @@
     }
   </script>
 </head>
-<body class="h-full flex flex-col justify-between font-sans antialiased text-analog-cream bg-analog-ink">
+<body class="h-full flex flex-col font-sans antialiased text-analog-cream bg-analog-ink">
 
-  <!-- Toast System Container (Stacked, fixed at bottom-center on mobile, top-right on desktop) -->
+  <!-- Toast System Container -->
   <div id="toastContainer" class="fixed z-50 flex flex-col gap-2 p-4 pointer-events-none bottom-0 left-0 right-0 items-center md:bottom-auto md:top-0 md:left-auto md:right-0 md:items-end w-full max-w-sm ml-auto mr-auto md:mr-0"></div>
 
   <!-- Header Banner -->
   <header class="border-b border-analog-border bg-analog-panel px-6 py-4 flex items-center justify-between shrink-0">
     <div class="flex items-center gap-3">
       <div class="h-8 w-8 rounded bg-analog-ink border border-analog-border flex items-center justify-center shadow shadow-black/20">
-        <svg class="h-4 w-4 text-analog-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h2l2-5 3 10 2-7 1 4h6" />
-        </svg>
+        <!-- Lucide-style Inline SVG Signal Wave Logo -->
+        <svg class="h-4 w-4 text-analog-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>
       </div>
       <div>
-        <h1 class="text-analog-cream font-bold tracking-tight text-sm leading-none font-sans">Flash-Speaker</h1>
-        <p class="text-[9px] text-analog-muted font-bold tracking-wider uppercase mt-1 font-sans">Signal Sync Console</p>
+        <h1 class="text-analog-cream font-black tracking-tight text-sm leading-none font-display uppercase">Flash-Speaker</h1>
+        <p class="text-[9px] text-analog-muted font-bold tracking-wider uppercase mt-1 font-sans">Precise Multi-Device Sync</p>
       </div>
     </div>
     
-    <!-- Wake Lock Control Box -->
-    <div class="flex items-center gap-3 bg-analog-ink px-3 py-1.5 rounded border border-analog-border">
-      <div class="relative inline-block w-8 mr-1 align-middle select-none h-4">
-        <input type="checkbox" id="wakeLockCheckbox" class="toggle-switch-input absolute block w-4 h-4 rounded bg-analog-panel border-analog-border appearance-none cursor-pointer outline-none transition-all duration-200 left-0" style="top: 0px; border: 1px solid #282B34;">
-        <label for="wakeLockCheckbox" class="toggle-switch-label block overflow-hidden h-4 rounded bg-analog-border cursor-pointer transition-all duration-200"></label>
+    <!-- Header Right Readouts -->
+    <div class="flex items-center gap-4">
+      <div class="hidden sm:flex flex-col text-right select-none">
+        <span class="text-[9px] text-analog-muted font-mono uppercase tracking-wider">Telemetry Link</span>
+        <span class="text-[8px] text-analog-copper font-bold uppercase tracking-wider font-sans mt-0.5">v2.1.0-Phase</span>
       </div>
-      <label for="wakeLockCheckbox" class="text-[10px] font-bold uppercase tracking-wider text-analog-muted select-none cursor-pointer font-display">
-        Keep Screen Active
-      </label>
+      
+      <!-- Wake Lock Control Box -->
+      <div class="flex items-center gap-2.5 bg-analog-ink px-3 py-1.5 rounded border border-analog-border">
+        <div class="relative inline-block w-8 mr-1 align-middle select-none h-4">
+          <input type="checkbox" id="wakeLockCheckbox" class="toggle-switch-input absolute block w-4 h-4 rounded bg-analog-panel border-analog-border appearance-none cursor-pointer outline-none transition-all duration-200 left-0" style="top: 0px; border: 1px solid #282B34;">
+          <label for="wakeLockCheckbox" class="toggle-switch-label block overflow-hidden h-4 rounded bg-analog-border cursor-pointer transition-all duration-200"></label>
+        </div>
+        <label for="wakeLockCheckbox" class="text-[10px] font-bold uppercase tracking-wider text-analog-muted select-none cursor-pointer font-sans">
+          Screen Lock
+        </label>
+      </div>
     </div>
   </header>
 
   <!-- MAIN SCROLLABLE CONTAINER -->
   <main class="flex-1 overflow-y-auto px-4 py-6 md:p-8 flex flex-col items-center justify-start w-full max-w-4xl mx-auto">
-       <!-- 1. HOST SETUP SCREEN -->
+       <!-- 1. HOST SETUP SCREEN (Asymmetric Grid) -->
     <div id="setupScreen" class="w-full grid grid-cols-1 md:grid-cols-5 gap-8 items-center max-w-4xl my-auto hidden">
       <!-- CRT Oscilloscope Motif (Left 3 columns) -->
-      <div class="hidden md:flex md:col-span-3 flex-col gap-4 items-center justify-center p-6 border border-analog-border bg-analog-panel rounded relative overflow-hidden h-[360px] oscilloscope-grid crt-overlay select-none">
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
-          <svg class="w-72 h-72 text-analog-amber/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-            <circle cx="50" cy="50" r="45" stroke-dasharray="1 3" stroke-width="0.5" />
-            <circle cx="50" cy="50" r="35" stroke-dasharray="2 4" stroke-width="0.5" />
-            <path d="M 50 0 L 50 100 M 0 50 L 100 50" stroke-width="0.25" />
-          </svg>
-        </div>
-        <svg class="w-full h-48 text-analog-amber drop-shadow-[0_0_8px_#E8A548] animate-pulse" viewBox="0 0 200 100" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M 0 50 C 30 10, 50 90, 80 30 C 110 -20, 130 120, 160 50 L 200 50" />
-        </svg>
-        <div class="text-center z-10">
-          <div class="text-[10px] font-bold text-analog-amber uppercase tracking-widest font-display">Diagnostic Calibrator</div>
-          <div class="text-[9px] text-analog-muted mt-1 uppercase font-display">Awaiting phase connection</div>
+      <div class="hidden md:flex md:col-span-3 flex-col gap-4 items-center justify-center p-6 border border-analog-border bg-analog-panel rounded-xl relative overflow-hidden h-[360px] oscilloscope-grid crt-overlay select-none">
+        <canvas id="calibratorCanvas" class="w-full h-52 block opacity-95"></canvas>
+        <div class="absolute bottom-6 left-6 text-left z-10 bg-analog-ink/75 backdrop-blur-xs px-3 py-2 rounded border border-analog-border/50">
+          <div class="text-[10px] font-bold text-analog-amber uppercase tracking-wider font-display">Scope Calibrator</div>
+          <div class="text-[9px] text-analog-muted mt-0.5 uppercase font-sans">Awaiting receiver link...</div>
         </div>
       </div>
 
       <!-- Setup controls form (Right 2 columns) -->
-      <div class="md:col-span-2 bg-analog-panel rounded p-6 border border-analog-border flex flex-col gap-6">
+      <div class="md:col-span-2 bg-analog-panel rounded-xl p-6 border border-analog-border flex flex-col gap-6 shadow-lg">
         <!-- Playback Mode Selector Toggle -->
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted mb-2 font-sans">Source Protocol</label>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted mb-2 font-sans">Audio Source Type</label>
           <div class="grid grid-cols-2 gap-2 bg-analog-ink p-1 rounded border border-analog-border">
             <button onclick="switchSetupMode('file')" id="toggleFileModeBtn" class="py-2.5 text-xs font-bold rounded transition-all bg-analog-amber text-analog-ink font-sans">Audio File</button>
             <button onclick="switchSetupMode('youtube')" id="toggleYtModeBtn" class="py-2.5 text-xs font-bold rounded transition-all text-analog-muted hover:text-analog-cream font-sans">YouTube Video</button>
@@ -205,7 +204,7 @@
         <!-- File Mode Input Panel -->
         <div id="fileInputPanel" class="flex flex-col gap-4">
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted mb-2 font-sans">Line Input</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted mb-2 font-sans">Audio Source File</label>
             <div id="dropZone" class="relative group border border-dashed border-analog-border hover:border-analog-amber rounded p-6 text-center cursor-pointer transition-colors bg-analog-ink flex flex-col items-center justify-center gap-3">
               <input type="file" id="audioFileInput" accept="audio/*" class="absolute inset-0 opacity-0 cursor-pointer">
               <div id="fileSelectorText" class="text-xs font-semibold text-analog-cream">Drop audio file or click to browse</div>
@@ -224,19 +223,19 @@
           <div id="hostTrackDisplay" class="hidden flex items-center justify-between bg-analog-ink p-3 rounded border border-analog-border">
             <div class="overflow-hidden">
               <div id="hostTrackName" class="text-xs font-bold text-analog-cream truncate">Track Name</div>
-              <div id="hostTrackSize" class="text-[10px] text-analog-muted font-medium mt-0.5 font-display">Size</div>
+              <div id="hostTrackSize" class="text-[10px] text-analog-muted font-medium mt-0.5 font-mono">Size</div>
             </div>
-            <span class="text-[8px] bg-analog-copper/10 text-analog-copper border border-analog-copper/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider font-display">READY</span>
+            <span class="text-[8px] bg-analog-copper/10 text-analog-copper border border-analog-copper/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider font-sans">READY</span>
           </div>
         </div>
 
         <!-- YouTube Mode Input Panel -->
         <div id="ytInputPanel" class="hidden flex flex-col gap-4">
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted mb-2 font-sans">Stream Address</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted mb-2 font-sans">YouTube Video Link / ID</label>
             <div class="flex gap-2">
               <input type="text" id="ytUrlInput" placeholder="Enter video link or 11-char ID" class="flex-1 min-w-0 bg-analog-ink border border-analog-border rounded px-3 py-2.5 text-xs text-analog-cream placeholder-analog-muted/40 focus:outline-none focus:border-analog-amber transition-colors font-sans">
-              <button onclick="hostLoadYoutubeVideo()" class="bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream px-4 rounded text-xs font-bold transition-colors font-sans uppercase tracking-wider shrink-0">
+              <button onclick="hostLoadYoutubeVideo()" class="bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream px-4 rounded text-xs font-bold transition-colors font-sans uppercase tracking-wider shrink-0">
                 Load
               </button>
             </div>
@@ -251,7 +250,7 @@
                 <div id="ytPreviewAuthor" class="text-[10px] text-analog-muted font-medium mt-0.5 font-sans">Author</div>
               </div>
             </div>
-            <span class="text-[8px] bg-analog-copper/10 text-analog-copper border border-analog-copper/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider font-display shrink-0">READY</span>
+            <span class="text-[8px] bg-analog-copper/10 text-analog-copper border border-analog-copper/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider font-sans shrink-0">READY</span>
           </div>
 
           <div class="text-[9px] text-analog-muted bg-analog-ink/40 p-2.5 rounded border border-analog-border leading-normal">
@@ -261,31 +260,29 @@
 
         <!-- Create Room Trigger -->
         <button id="createRoomBtn" onclick="hostCreateRoom()" disabled class="w-full bg-analog-panel text-analog-muted border border-analog-border py-3.5 px-4 rounded font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 font-sans text-xs cursor-not-allowed uppercase tracking-wider">
-          Select Audio to Initialize
+          Select Audio File
         </button>
 
         <!-- Divider -->
         <div class="flex items-center gap-3 my-1 shrink-0">
-          <div class="h-[1px] bg-analog-border flex-1"></div>
+          <div class="h-[1px] bg-analog-border/50 flex-1"></div>
           <span class="text-[9px] font-bold text-analog-muted uppercase tracking-widest font-sans">OR</span>
-          <div class="h-[1px] bg-analog-border flex-1"></div>
+          <div class="h-[1px] bg-analog-border/50 flex-1"></div>
         </div>
 
         <!-- Manual Guest Connect Section -->
-        <div class="flex flex-col gap-2">
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted font-sans">Guest Receiver Mode</label>
+        <div class="flex flex-col gap-2.5">
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-analog-muted font-sans">Receiver Mode (Guest)</label>
           <div class="flex gap-2">
-            <input type="text" id="manualRoomCodeInput" maxlength="6" placeholder="Enter 6-char Room Code" class="flex-1 min-w-0 bg-analog-ink border border-analog-border rounded px-3 py-2.5 text-xs text-analog-cream placeholder-analog-muted/40 uppercase font-bold tracking-wider focus:outline-none focus:border-analog-amber transition-colors font-display">
-            <button onclick="guestManualJoin()" class="bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream px-4 rounded text-xs font-bold transition-colors font-sans uppercase tracking-wider shrink-0">
+            <input type="text" id="manualRoomCodeInput" maxlength="6" placeholder="Enter 6-char Room Code" class="flex-1 min-w-0 bg-analog-ink border border-analog-border rounded px-3 py-2.5 text-xs text-analog-cream placeholder-analog-muted/30 uppercase font-bold tracking-wider focus:outline-none focus:border-analog-amber transition-colors font-mono">
+            <button onclick="guestManualJoin()" class="bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream px-4 rounded text-xs font-bold transition-colors font-sans uppercase tracking-wider shrink-0">
               Join
             </button>
           </div>
           
-          <button onclick="openCameraScanner()" class="w-full mt-1 bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream py-2.5 px-4 rounded text-xs font-bold transition-all flex items-center justify-center gap-2 font-sans uppercase tracking-wider">
-            <svg class="h-4 w-4 text-analog-amber" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <circle cx="12" cy="13" r="4" />
-            </svg>
+          <button onclick="openCameraScanner()" class="w-full mt-1 bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream py-2.5 px-4 rounded text-xs font-bold transition-all flex items-center justify-center gap-2 font-sans uppercase tracking-wider">
+            <!-- Inline SVG Camera Icon (uniform Lucide 1.25px stroke style) -->
+            <svg class="h-4 w-4 text-analog-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
             Scan Host QR Code
           </button>
         </div>
@@ -293,119 +290,142 @@
     </div>
 
     <!-- 2. HOST DASHBOARD -->
-    <div id="hostScreen" class="w-full flex flex-col gap-6 hidden">
+    <div id="hostScreen" class="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 hidden items-start">
       
-      <!-- Dominant Centerpiece: Signal Monitor & Playback Deck -->
-      <div class="bg-analog-panel rounded border border-analog-border flex flex-col relative overflow-hidden shadow-2xl crt-overlay">
-        <div class="p-4 border-b border-analog-border flex items-center justify-between">
-          <div class="text-xs font-bold text-analog-cream font-sans">Signal Monitor</div>
-          <div class="flex items-center gap-2 bg-analog-ink px-3 py-1 rounded border border-analog-border">
-            <div class="h-2 w-2 rounded-full bg-analog-muted" id="hostPlaybackStateDot"></div>
-            <span id="hostPlaybackStateText" class="text-[9px] font-bold uppercase tracking-wider text-analog-muted font-display">Idle / Ready</span>
+      <!-- LEFT COLUMN: Main Calibration / QR Deck (1/3 width, DOMINANT) -->
+      <div class="lg:col-span-1 flex flex-col gap-6">
+        <!-- Main Tuning Frequency & QR Code Deck (CRT Radar Screen style centerpiece) -->
+        <div class="bg-analog-panel rounded-xl border border-analog-border p-6 flex flex-col items-center gap-6 relative overflow-hidden shadow-2xl crt-overlay text-center bg-[#17191d]">
+          <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-analog-amber/5 via-transparent to-transparent pointer-events-none"></div>
+          
+          <div class="w-full">
+            <span class="text-[10px] text-analog-muted font-bold uppercase tracking-wider font-sans">Room Frequency</span>
+            <h3 id="hostRoomCodeText" class="text-4xl font-black text-analog-amber tracking-wider mt-1 font-mono">CODE12</h3>
           </div>
-        </div>
-        
-        <!-- Canvas wrapper -->
-        <div class="bg-analog-ink p-4 flex items-center justify-center">
-          <canvas id="hostVisualizerCanvas" width="800" height="240" class="w-full h-48 block rounded border border-analog-border shadow-inner bg-[#121316]"></canvas>
-        </div>
-
-        <!-- Integrated Transport Controls -->
-        <div class="p-6 border-t border-analog-border flex flex-col md:flex-row gap-6 items-center justify-between bg-analog-panel">
-          <!-- Delay Line Slider -->
-          <div class="flex flex-col gap-1.5 w-full md:w-auto">
-            <label for="leadTimeSlider" class="text-[10px] font-bold text-analog-muted uppercase tracking-wider flex justify-between font-sans">
-              Delay Line (Lead Time)
-              <span id="leadTimeVal" class="text-analog-amber font-bold font-display ml-2">2.0s</span>
-            </label>
-            <input type="range" id="leadTimeSlider" min="0.5" max="5.0" step="0.5" value="2.0" oninput="updateLeadTimeDisplay(this.value)" class="w-full md:w-48">
+          
+          <!-- High-Contrast CRT Calibration Target for QR Code -->
+          <div class="relative bg-white p-4 rounded-lg shadow-inner shadow-black/40 border border-analog-border/50 shrink-0">
+            <div id="qrcode" class="w-40 h-40"></div>
           </div>
-
-          <!-- Transport Action Buttons -->
-          <div class="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
-            <button id="masterPauseBtn" onclick="pauseHostPlayback()" disabled class="flex-1 md:flex-initial bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream disabled:text-analog-muted disabled:hover:bg-analog-panel disabled:cursor-not-allowed py-2.5 px-5 rounded font-bold text-xs transition-colors font-sans">
-              Pause
-            </button>
-            <button id="masterStopBtn" onclick="stopHostPlayback()" disabled class="flex-1 md:flex-initial bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream disabled:text-analog-muted disabled:hover:bg-analog-panel disabled:cursor-not-allowed py-2.5 px-5 rounded font-bold text-xs transition-colors font-sans">
-              Stop
-            </button>
-            <button id="masterPlayBtn" onclick="playHostPlayback()" class="flex-1 md:flex-initial bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3 px-8 rounded text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-analog-amber/20 font-sans uppercase tracking-wider">
-              Play
-            </button>
+          
+          <!-- Broadcast URL strip -->
+          <div class="w-full flex flex-col gap-2">
+            <span class="text-[9px] text-analog-muted font-bold uppercase tracking-wider font-sans">Share Broadcast URL</span>
+            <div class="flex items-center gap-1.5 bg-analog-ink px-2.5 py-2 rounded border border-analog-border overflow-hidden">
+              <span id="hostShareUrlText" class="text-[11px] text-analog-amber truncate flex-1 select-all font-mono font-bold">http://...</span>
+              <button onclick="copyShareLink()" class="text-[10px] text-analog-cream hover:text-analog-amber px-2.5 py-1 rounded font-bold font-sans uppercase tracking-wider transition-colors shrink-0 flex items-center gap-1">
+                <!-- Inline SVG Copy Icon -->
+                <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Supporting Row -->
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 w-full">
-        <!-- Left Column: Tuning & Track (2 columns) -->
-        <div class="md:col-span-2 flex flex-col gap-6">
-          <!-- Tuning Panel -->
-          <div class="bg-analog-panel rounded p-5 border border-analog-border flex flex-col gap-4 relative overflow-hidden oscilloscope-grid">
-            <div class="flex gap-4 items-center">
-              <div class="bg-white p-2 rounded shadow shrink-0" id="qrcode"></div>
-              <div class="flex-1 min-w-0">
-                <div class="text-[10px] text-analog-muted font-bold uppercase tracking-wider font-sans">Tuning Frequency</div>
-                <h3 id="hostRoomCodeText" class="text-2xl font-black text-analog-amber tracking-wider mt-0.5 font-display">CODE12</h3>
-              </div>
+      
+      <!-- RIGHT COLUMN: Control Console & Connected Roster (2/3 width) -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        
+        <!-- Signal Monitor (CRT Oscilloscope visualizer) & Integrated Transport Deck -->
+        <div class="bg-analog-panel rounded-xl border border-analog-border flex flex-col relative overflow-hidden shadow-xl">
+          <div class="p-4 border-b border-analog-border flex items-center justify-between">
+            <h2 class="text-xs font-bold text-analog-cream uppercase tracking-wide font-display">Signal Monitor</h2>
+            <div class="flex items-center gap-2 bg-analog-ink px-3 py-1 rounded border border-analog-border">
+              <div class="h-1.5 w-1.5 rounded-full bg-analog-muted" id="hostPlaybackStateDot"></div>
+              <span id="hostPlaybackStateText" class="text-[9px] font-bold uppercase tracking-wider text-analog-muted font-sans">Standby</span>
             </div>
+          </div>
+          
+          <!-- Canvas Visualizer Trace -->
+          <div class="bg-analog-ink p-4 flex items-center justify-center relative">
+            <canvas id="hostVisualizerCanvas" width="800" height="200" class="w-full h-44 block rounded border border-analog-border/50 shadow-inner bg-[#121316]"></canvas>
             
-            <div class="flex flex-col gap-1.5">
-              <span class="text-[10px] text-analog-muted font-bold uppercase tracking-wider font-sans">Share Broadcast URL:</span>
-              <div class="flex items-center gap-2 bg-analog-ink p-2 rounded border border-analog-border overflow-hidden w-full">
-                <span id="hostShareUrlText" class="text-xs text-analog-amber truncate flex-1 select-all font-mono font-bold">http://...</span>
-                <button onclick="copyShareLink()" class="bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream hover:text-analog-amber px-3 py-1.5 rounded text-[10px] font-bold font-sans uppercase tracking-wider transition-colors shrink-0">
-                  Copy
-                </button>
-              </div>
+            <!-- Custom Empty State Animated Wave (breathing dot & sweeping line) -->
+            <div id="hostVisualizerEmptyState" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
+              <!-- Animated phosphor sweeping line -->
+              <div class="w-full h-[1px] bg-analog-amber/10 shadow-[0_0_8px_#E8A548] absolute top-1/2 left-0 animate-pulse"></div>
+              <!-- Glowing phosphor dot pulsing -->
+              <div class="h-3 w-3 rounded-full bg-analog-amber/35 shadow-[0_0_12px_#E8A548] animate-ping absolute"></div>
+              <span class="text-[10px] text-analog-muted/50 uppercase tracking-widest font-sans mt-8">Calibration Signal Standby</span>
             </div>
           </div>
 
-          <!-- Source Deck -->
-          <div class="bg-analog-panel rounded p-5 border border-analog-border flex flex-col gap-4 relative overflow-hidden oscilloscope-grid">
-            <div>
-              <div class="text-[10px] text-analog-muted font-bold uppercase tracking-wider font-sans">Source Deck</div>
-              <h4 id="hostDashTrackName" class="text-xs font-bold text-analog-cream mt-1 truncate font-sans">Default Tone</h4>
-              <div id="hostDashTrackSize" class="text-[9px] text-analog-muted font-semibold mt-0.5 font-display">Size</div>
+          <!-- Transport controls & delay slider -->
+          <div class="p-5 border-t border-analog-border flex flex-col md:flex-row gap-5 items-center justify-between bg-analog-panel/40">
+            <!-- Delay line control -->
+            <div class="flex flex-col gap-1 w-full md:w-auto">
+              <label for="leadTimeSlider" class="text-[10px] font-bold text-analog-muted uppercase tracking-wider flex justify-between font-sans">
+                Delay line
+                <span id="leadTimeVal" class="text-analog-amber font-bold font-mono ml-2">2.0s</span>
+              </label>
+              <input type="range" id="leadTimeSlider" min="0.5" max="5.0" step="0.5" value="2.0" oninput="updateLeadTimeDisplay(this.value)" class="w-full md:w-40">
             </div>
-            
-            <div class="flex flex-col gap-2" id="hostFileTrackControlPanel">
+
+            <!-- Playback Controls -->
+            <div class="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+              <button id="masterPauseBtn" onclick="pauseHostPlayback()" disabled class="flex-1 md:flex-initial bg-transparent hover:bg-analog-border border border-analog-border text-analog-cream disabled:text-analog-muted/40 disabled:border-analog-border/30 disabled:hover:bg-transparent disabled:cursor-not-allowed py-2 px-4 rounded text-xs font-semibold transition-colors font-sans uppercase tracking-wider">
+                Pause
+              </button>
+              <button id="masterStopBtn" onclick="stopHostPlayback()" disabled class="flex-1 md:flex-initial bg-transparent hover:bg-analog-border border border-analog-border text-analog-cream disabled:text-analog-muted/40 disabled:border-analog-border/30 disabled:hover:bg-transparent disabled:cursor-not-allowed py-2 px-4 rounded text-xs font-semibold transition-colors font-sans uppercase tracking-wider">
+                Stop
+              </button>
+              <button id="masterPlayBtn" onclick="playHostPlayback()" class="flex-1 md:flex-initial bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3 px-8 rounded text-xs transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-analog-amber/15 font-sans uppercase tracking-wider">
+                <svg class="h-3 w-3 fill-current" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Play
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Source Deck - COLLAPSED into a quiet compact strip below visualizer, borderless -->
+        <div class="flex flex-col md:flex-row items-center justify-between py-3 px-4 bg-analog-ink/40 rounded-lg border border-analog-border/50 gap-4">
+          <div class="flex items-center gap-2.5 overflow-hidden">
+            <span class="text-[9px] font-bold text-analog-muted uppercase tracking-wider font-sans shrink-0">Source:</span>
+            <!-- YouTube Preview Thumb (visible only in youtube mode) -->
+            <img id="ytPreviewThumb" src="" class="hidden h-6 w-9 rounded object-cover shrink-0 bg-analog-panel">
+            <div class="truncate flex items-baseline gap-2">
+              <span id="hostDashTrackName" class="text-xs font-bold text-analog-cream truncate font-sans">Default Tone</span>
+              <span id="hostDashTrackSize" class="text-[10px] text-analog-muted font-bold font-mono shrink-0">Size</span>
+            </div>
+          </div>
+          
+          <!-- Source Controllers integrated cleanly -->
+          <div class="shrink-0">
+            <div class="flex gap-2" id="hostFileTrackControlPanel">
               <input type="file" id="hostReplaceFileInput" accept="audio/*" class="hidden" onchange="hostReplaceTrack(this)">
-              <button onclick="document.getElementById('hostReplaceFileInput').click()" class="w-full bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream py-2 rounded text-xs font-bold font-sans uppercase tracking-wider transition-colors">
-                Change Track
+              <button onclick="document.getElementById('hostReplaceFileInput').click()" class="text-[10px] text-analog-cream hover:text-analog-amber border border-analog-border/60 hover:border-analog-amber px-3 py-1.5 rounded font-bold font-sans uppercase tracking-wider transition-colors bg-analog-panel">
+                Change File
               </button>
             </div>
 
-            <div class="flex flex-col gap-2 hidden" id="hostYtTrackControlPanel">
-              <span class="text-[9px] text-analog-muted font-bold uppercase tracking-wider font-sans">Replace YouTube Stream:</span>
-              <div class="flex gap-2">
-                <input type="text" id="hostYtReplaceInput" placeholder="Enter video link or ID" class="bg-analog-ink border border-analog-border text-xs font-semibold text-analog-cream rounded px-3 py-2 flex-1 min-w-0 placeholder-analog-muted/40 focus:ring-analog-amber focus:border-analog-amber outline-none font-sans">
-                <button onclick="hostChangeYoutubeVideo()" class="bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-cream px-3 py-2 rounded text-xs font-bold transition-colors shrink-0 font-sans uppercase tracking-wider">
-                  Load
-                </button>
-              </div>
+            <div class="flex gap-2 hidden" id="hostYtTrackControlPanel">
+              <input type="text" id="hostYtReplaceInput" placeholder="YouTube Video URL or ID" class="bg-analog-ink border border-analog-border/50 text-[10px] font-semibold text-analog-cream rounded px-2.5 py-1.5 w-40 placeholder-analog-muted/30 focus:outline-none focus:border-analog-amber font-sans">
+              <button onclick="hostChangeYoutubeVideo()" class="bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream px-3 py-1.5 rounded text-[10px] font-bold transition-colors font-sans uppercase tracking-wider">
+                Load Link
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Receivers Roster (3 columns) -->
-        <div class="md:col-span-3 bg-analog-panel rounded p-5 border border-analog-border flex flex-col gap-4">
-          <div class="flex items-center justify-between border-b border-analog-border pb-3">
-            <h3 class="text-[10px] font-bold uppercase tracking-wider text-analog-muted flex items-center gap-2 font-sans">
-              Receiver Channels
-              <span id="rosterCountBadge" class="bg-analog-ink text-analog-cream px-2 py-0.5 rounded border border-analog-border text-[9px] font-display">0</span>
+        <!-- Connected Devices Roster (Border-less table list look with row background variations) -->
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center justify-between border-b border-analog-border pb-2.5 px-1">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-analog-cream flex items-center gap-2 font-display">
+              Connected Devices
+              <span id="rosterCountBadge" class="bg-analog-ink text-analog-cream px-2 py-0.5 rounded border border-analog-border text-[10px] font-mono">0</span>
             </h3>
             
-            <div id="hostSignalStatus" class="flex items-center gap-1.5 text-[9px] text-analog-copper font-bold font-display uppercase tracking-wider">
+            <div id="hostSignalStatus" class="flex items-center gap-1.5 text-[9px] text-analog-copper font-bold font-sans uppercase tracking-wider">
               <span class="h-1.5 w-1.5 rounded-full bg-analog-copper animate-pulse"></span>
               Console Online
             </div>
           </div>
           
-          <div id="rosterList" class="flex flex-col gap-2.5 overflow-y-auto max-h-[260px] pr-2">
-            <div id="emptyRosterText" class="text-center text-xs text-analog-muted py-10 font-semibold font-sans">Waiting for receiver signals...</div>
+          <div id="rosterList" class="flex flex-col gap-1.5 overflow-y-auto max-h-[220px]">
+            <div id="emptyRosterText" class="text-center text-xs text-analog-muted py-8 font-medium font-sans">Waiting for receiver signals...</div>
           </div>
         </div>
+        
       </div>
     </div>
 
@@ -511,7 +531,7 @@
           </select>
         </div>
 
-        <button onclick="cancelReconnection()" class="bg-analog-ink hover:bg-analog-border border border-analog-border text-analog-crimson font-bold text-xs px-4 py-2.5 rounded transition-colors font-sans uppercase tracking-wider">
+        <button onclick="cancelReconnection()" class="bg-transparent hover:bg-analog-border border border-analog-border text-analog-crimson font-bold text-xs px-4 py-2 rounded transition-colors font-sans uppercase tracking-wider">
           Disconnect
         </button>
       </div>
@@ -520,10 +540,9 @@
     <!-- 5. ERROR / UNREACHABLE SCREEN -->
     <div id="errorScreen" class="w-full flex flex-col gap-8 max-w-sm my-auto hidden">
       <div class="text-center">
-        <div class="h-12 w-12 rounded bg-analog-panel border border-analog-crimson/30 flex items-center justify-center shadow mx-auto mb-4 text-analog-crimson animate-pulse">
-          <svg class="h-6 w-6 text-analog-crimson" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
+        <div class="h-12 w-12 rounded-xl bg-analog-panel border border-analog-crimson/30 flex items-center justify-center shadow mx-auto mb-4 text-analog-crimson animate-pulse">
+          <!-- Alert Triangle Lucide SVG -->
+          <svg class="h-6 w-6 text-analog-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
         </div>
         <h2 class="text-xl font-bold text-analog-cream uppercase tracking-wider font-display">Signal Unreachable</h2>
         <p class="text-xs text-analog-muted mt-2">Traversal failed. Phase tracking synchronizer lost host signal.</p>
@@ -558,8 +577,8 @@
   </div>
 
   <!-- iOS Safari IFrame Unlock Overlay -->
-  <div id="ytUnlockOverlay" class="fixed bottom-44 right-4 z-30 w-48 bg-analog-panel border border-analog-border text-analog-amber rounded p-3 text-[9px] leading-snug shadow-xl hidden select-none font-display uppercase tracking-wide">
-    ⚠️ Tap preview block in corner to enable speaker audio.
+  <div id="ytUnlockOverlay" class="fixed bottom-44 right-4 z-30 w-48 bg-analog-panel border border-analog-border text-analog-amber rounded-lg p-3 text-[9px] leading-snug shadow-xl hidden select-none font-sans uppercase tracking-wider">
+    Tap preview block in corner to enable speaker audio.
   </div>
 
   <!-- RECONNECTING FULL SCREEN OVERLAY -->
@@ -616,10 +635,7 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-analog-border py-3 text-center bg-analog-panel shrink-0 select-none">
-    <p class="text-[9px] text-analog-muted font-display uppercase tracking-widest">Flash-Speaker v2.1.0-Phase</p>
-  </footer>
+  <!-- FOOTER REMOVED (TELEMETRY RELOCATED TO HEADER) -->
 
   <!-- SCRIPT ENGINE -->
   <script>
@@ -783,11 +799,11 @@
         if (appState.audioBuffer) {
           createRoomBtn.removeAttribute('disabled');
           createRoomBtn.className = "w-full bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3.5 px-4 rounded transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-pointer font-sans text-xs tracking-wider";
-          createRoomBtn.innerText = "Initialize Broadcast Room";
+          createRoomBtn.innerText = "Create Sync Room";
         } else {
           createRoomBtn.setAttribute('disabled', 'true');
           createRoomBtn.className = "w-full bg-analog-panel text-analog-muted border border-analog-border py-3.5 px-4 rounded font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-not-allowed font-sans text-xs tracking-wider";
-          createRoomBtn.innerText = "Select Audio to Initialize";
+          createRoomBtn.innerText = "Select Audio File";
         }
       } else {
         ytBtn.className = "py-2.5 text-xs font-bold rounded transition-all bg-analog-amber text-analog-ink font-sans";
@@ -800,7 +816,7 @@
         
         createRoomBtn.setAttribute('disabled', 'true');
         createRoomBtn.className = "w-full bg-analog-panel text-analog-muted border border-analog-border py-3.5 px-4 rounded font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-not-allowed font-sans text-xs tracking-wider";
-        createRoomBtn.innerText = "Load Video to Initialize";
+        createRoomBtn.innerText = "Enter YouTube URL";
       }
     }
 
@@ -860,7 +876,7 @@
       const createRoomBtn = document.getElementById('createRoomBtn');
       createRoomBtn.removeAttribute('disabled');
       createRoomBtn.className = "w-full bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3.5 px-4 rounded transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-pointer font-sans text-xs tracking-wider";
-      createRoomBtn.innerText = "Initialize Broadcast Room";
+      createRoomBtn.innerText = "Create Sync Room";
       
       showToast("YouTube Video verified!", "success");
     }
@@ -985,10 +1001,24 @@
               errMsg = "IFrame playback blocked on this device.";
             } else if (event.data === 100) {
               errMsg = "This video was not found or is private.";
-            } else if (event.data === 101 || event.data === 150) {
+            } else if (event.data === 101 || event.data === 150 || event.data === 153) {
               errMsg = "This video cannot be embedded. Try a different link.";
             }
             showToast(errMsg, "error");
+            
+            // Clean up setup state on verification failure to avoid broken states
+            if (appState.role === 'host' && appState.currentView === 'setupScreen') {
+              appState.trackId = null;
+              appState.trackName = null;
+              const preview = document.getElementById('ytPreviewDisplay');
+              if (preview) preview.classList.add('hidden');
+              const createRoomBtn = document.getElementById('createRoomBtn');
+              if (createRoomBtn) {
+                createRoomBtn.setAttribute('disabled', 'true');
+                createRoomBtn.className = "w-full bg-analog-panel text-analog-muted border border-analog-border py-3.5 px-4 rounded font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-not-allowed font-sans text-xs tracking-wider";
+                createRoomBtn.innerText = "Enter YouTube URL";
+              }
+            }
           }
         }
       });
@@ -1101,7 +1131,7 @@
       const createRoomBtn = document.getElementById('createRoomBtn');
       createRoomBtn.removeAttribute('disabled');
       createRoomBtn.className = "w-full bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3.5 px-4 rounded transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/40 cursor-pointer font-sans text-xs tracking-wider";
-      createRoomBtn.innerText = "Initialize Broadcast Room";
+      createRoomBtn.innerText = "Create Sync Room";
     }
 
     // --- Host-Side Room Creation ---
@@ -2921,13 +2951,97 @@
       draw();
     }
 
+    let calibratorAnimationId = null;
+    function startCalibratorAnimation() {
+      const canvas = document.getElementById('calibratorCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+      
+      function draw() {
+        if (appState.currentView !== 'setupScreen') {
+          calibratorAnimationId = null;
+          return;
+        }
+        
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        
+        const w = rect.width;
+        const h = rect.height;
+        ctx.clearRect(0, 0, w, h);
+        
+        // Draw grid
+        ctx.strokeStyle = 'rgba(40, 43, 52, 0.2)';
+        ctx.lineWidth = 0.5;
+        for (let x = 20; x < w; x += 20) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, h);
+          ctx.stroke();
+        }
+        for (let y = 20; y < h; y += 20) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+          ctx.stroke();
+        }
+        
+        // Center crosshairs
+        ctx.strokeStyle = 'rgba(232, 165, 72, 0.12)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(w / 2, 0);
+        ctx.lineTo(w / 2, h);
+        ctx.moveTo(0, h / 2);
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+        
+        // Draw active calibrator wave
+        ctx.strokeStyle = '#E8A548';
+        ctx.lineWidth = 1.75;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = '#E8A548';
+        
+        ctx.beginPath();
+        for (let x = 0; x < w; x++) {
+          const normX = x / w;
+          const y = h / 2 + 
+                    Math.sin(normX * 6 + t) * 16 * Math.sin(t * 0.4) +
+                    Math.cos(normX * 12 - t * 1.2) * 5 * Math.sin(t * 0.1) +
+                    Math.sin(normX * 3 + t * 0.6) * 4;
+          if (x === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        
+        t += 0.045;
+        calibratorAnimationId = requestAnimationFrame(draw);
+      }
+      
+      if (calibratorAnimationId) cancelAnimationFrame(calibratorAnimationId);
+      calibratorAnimationId = requestAnimationFrame(draw);
+    }
+
     // --- State-to-UI View Controllers ---
     function showView(viewId) {
+      appState.currentView = viewId;
       ['setupScreen', 'hostScreen', 'guestJoinScreen', 'guestScreen', 'errorScreen'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
       document.getElementById(viewId).classList.remove('hidden');
+      
+      if (viewId === 'setupScreen') {
+        setTimeout(startCalibratorAnimation, 40);
+      }
     }
 
     function updateLeadTimeDisplay(val) {
@@ -3009,82 +3123,103 @@
       
       if (isMediaLoaded && hasReadyGuests) {
         masterPlayBtn.removeAttribute('disabled');
-        masterPlayBtn.className = "flex-1 md:flex-initial bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3 px-8 rounded text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-analog-amber/20 cursor-pointer font-sans uppercase tracking-wider";
+        masterPlayBtn.className = "flex-1 md:flex-initial bg-analog-amber hover:bg-analog-copper text-analog-ink font-bold py-3 px-8 rounded text-xs transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-analog-amber/15 cursor-pointer font-sans uppercase tracking-wider";
         
         if (appState.isPlaying) {
           masterPauseBtn.removeAttribute('disabled');
-          masterPauseBtn.className = "flex-1 md:flex-initial bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream py-2.5 px-5 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer font-sans";
+          masterPauseBtn.className = "flex-1 md:flex-initial bg-transparent hover:bg-analog-border/40 border border-analog-border text-analog-cream py-2 px-4 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans uppercase tracking-wider";
           masterStopBtn.removeAttribute('disabled');
-          masterStopBtn.className = "flex-1 md:flex-initial bg-analog-panel hover:bg-analog-border border border-analog-border text-analog-cream py-2.5 px-5 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer font-sans";
+          masterStopBtn.className = "flex-1 md:flex-initial bg-transparent hover:bg-analog-border/40 border border-analog-border text-analog-cream py-2 px-4 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer font-sans uppercase tracking-wider";
         } else {
           masterPauseBtn.setAttribute('disabled', 'true');
-          masterPauseBtn.className = "flex-1 md:flex-initial bg-analog-panel text-analog-muted border border-analog-border py-2.5 px-5 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-not-allowed font-sans";
+          masterPauseBtn.className = "flex-1 md:flex-initial bg-transparent text-analog-muted/40 border border-analog-border/30 py-2 px-4 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-not-allowed font-sans uppercase tracking-wider";
           masterStopBtn.setAttribute('disabled', 'true');
-          masterStopBtn.className = "flex-1 md:flex-initial bg-analog-panel text-analog-muted border border-analog-border py-2.5 px-5 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-not-allowed font-sans";
+          masterStopBtn.className = "flex-1 md:flex-initial bg-transparent text-analog-muted/40 border border-analog-border/30 py-2 px-4 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-not-allowed font-sans uppercase tracking-wider";
         }
       } else {
         masterPlayBtn.setAttribute('disabled', 'true');
-        masterPlayBtn.className = "flex-1 md:flex-initial bg-analog-panel text-analog-muted border border-analog-border py-3 px-8 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-not-allowed font-sans";
+        masterPlayBtn.className = "flex-1 md:flex-initial bg-analog-panel/40 text-analog-muted/40 border border-analog-border/30 py-3 px-8 rounded font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-not-allowed font-sans uppercase tracking-wider";
         masterPauseBtn.setAttribute('disabled', 'true');
-        masterPauseBtn.className = "flex-1 md:flex-initial bg-analog-panel text-analog-muted border border-analog-border py-2.5 px-5 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-not-allowed font-sans";
+        masterPauseBtn.className = "flex-1 md:flex-initial bg-transparent text-analog-muted/40 border border-analog-border/30 py-2 px-4 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-not-allowed font-sans uppercase tracking-wider";
         masterStopBtn.setAttribute('disabled', 'true');
-        masterStopBtn.className = "flex-1 md:flex-initial bg-analog-panel text-analog-muted border border-analog-border py-2.5 px-5 rounded font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-not-allowed font-sans";
+        masterStopBtn.className = "flex-1 md:flex-initial bg-transparent text-analog-muted/40 border border-analog-border/30 py-2 px-4 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-not-allowed font-sans uppercase tracking-wider";
       }
 
       const stateDot = document.getElementById('hostPlaybackStateDot');
       const stateText = document.getElementById('hostPlaybackStateText');
       if (appState.isPlaying) {
-        stateDot.className = "h-2 w-2 rounded-full bg-analog-amber animate-pulse";
+        stateDot.className = "h-1.5 w-1.5 rounded-full bg-analog-amber animate-pulse";
         stateText.innerText = "ON AIR";
-        stateText.className = "text-[10px] font-bold uppercase tracking-wider text-analog-amber font-sans";
+        stateText.className = "text-[9px] font-bold uppercase tracking-wider text-analog-amber font-sans";
       } else {
-        stateDot.className = "h-2 w-2 rounded-full bg-analog-border";
+        stateDot.className = "h-1.5 w-1.5 rounded-full bg-analog-border";
         stateText.innerText = "STANDBY";
-        stateText.className = "text-[10px] font-bold uppercase tracking-wider text-analog-muted font-sans";
+        stateText.className = "text-[9px] font-bold uppercase tracking-wider text-analog-muted font-sans";
+      }
+
+      // Visualizer Empty State Visibility Toggle
+      const isPlayingNow = appState.isPlaying;
+      const emptyStateEl = document.getElementById('hostVisualizerEmptyState');
+      if (emptyStateEl) {
+        if (isPlayingNow) {
+          emptyStateEl.classList.add('hidden');
+        } else {
+          emptyStateEl.classList.remove('hidden');
+        }
       }
       
       if (appState.guests.size === 0) {
-        rosterList.innerHTML = `<div id="emptyRosterText" class="text-center text-xs text-analog-muted py-10 font-semibold font-display">Waiting for receiver signals...</div>`;
+        rosterList.innerHTML = `
+          <div id="emptyRosterText" class="text-center text-xs text-analog-muted py-8 font-medium font-sans flex flex-col items-center justify-center gap-3 select-none">
+            <!-- Breathing indicator (pulse ring dot) -->
+            <div class="relative flex items-center justify-center h-8 w-8">
+              <div class="absolute h-4 w-4 rounded-full bg-analog-border animate-ping"></div>
+              <div class="h-2 w-2 rounded-full bg-analog-muted/40"></div>
+            </div>
+            Awaiting receiver connections...
+          </div>
+        `;
         return;
       }
       
       rosterList.innerHTML = '';
+      let index = 0;
       for (const [peerId, guest] of appState.guests.entries()) {
         const card = document.createElement('div');
         
-        let cardBg = "bg-analog-ink border-analog-border";
+        let rowBg = index % 2 === 0 ? "bg-analog-ink/20" : "bg-transparent";
         let statusBadge = '';
         let pingColor = "text-analog-muted";
         let progressSection = '';
         
         if (guest.status === 'connecting') {
-          cardBg = "bg-analog-ink border-analog-border opacity-50";
-          statusBadge = `<span class="text-[8px] font-bold text-analog-amber uppercase bg-analog-amber/10 border border-analog-amber/20 px-1.5 py-0.5 rounded animate-pulse font-display">STANDBY</span>`;
+          rowBg += " opacity-50";
+          statusBadge = `<span class="text-[8px] font-bold text-analog-amber uppercase bg-analog-amber/10 border border-analog-amber/20 px-1.5 py-0.5 rounded animate-pulse font-sans">STANDBY</span>`;
           pingColor = "text-analog-muted";
         } else if (guest.status === 'syncing') {
-          statusBadge = `<span class="text-[8px] font-bold text-analog-amber uppercase bg-analog-amber/10 border border-analog-amber/20 px-1.5 py-0.5 rounded animate-pulse font-display">ALIGNING</span>`;
+          statusBadge = `<span class="text-[8px] font-bold text-analog-amber uppercase bg-analog-amber/10 border border-analog-amber/20 px-1.5 py-0.5 rounded animate-pulse font-sans">ALIGNING</span>`;
         } else if (guest.status === 'transferring') {
-          statusBadge = `<span class="text-[8px] font-bold text-analog-muted uppercase bg-analog-panel border border-analog-border px-1.5 py-0.5 rounded font-display">DOWNLOADING</span>`;
+          statusBadge = `<span class="text-[8px] font-bold text-analog-muted uppercase bg-analog-panel border border-analog-border px-1.5 py-0.5 rounded font-sans">DOWNLOADING</span>`;
           progressSection = `
-            <div class="w-full bg-analog-panel h-1.5 rounded overflow-hidden mt-3 border border-analog-border">
+            <div class="w-full bg-analog-panel h-1 rounded overflow-hidden mt-2 border border-analog-border/50">
               <div id="bar-${peerId}" class="h-full bg-analog-amber transition-all duration-150" style="width: ${guest.transferProgress}%"></div>
             </div>
           `;
         } else if (guest.status === 'ready') {
-          statusBadge = `<span class="text-[8px] font-bold text-analog-copper uppercase bg-analog-copper/10 border border-analog-copper/20 px-1.5 py-0.5 rounded font-display">READY</span>`;
+          statusBadge = `<span class="text-[8px] font-bold text-analog-copper uppercase bg-analog-copper/10 border border-analog-copper/20 px-1.5 py-0.5 rounded font-sans">READY</span>`;
           
           if (guest.rtt < 80) pingColor = "text-analog-copper";
           else if (guest.rtt < 200) pingColor = "text-analog-amber";
           else pingColor = "text-analog-crimson";
         } else if (guest.status === 'playing') {
-          statusBadge = `<span class="text-[8px] font-bold text-analog-copper uppercase bg-analog-copper/10 border border-analog-copper/20 px-1.5 py-0.5 rounded animate-pulse font-display">ON AIR</span>`;
+          statusBadge = `<span class="text-[8px] font-bold text-analog-copper uppercase bg-analog-copper/10 border border-analog-copper/20 px-1.5 py-0.5 rounded animate-pulse font-sans">ON AIR</span>`;
           
           if (guest.rtt < 80) pingColor = "text-analog-copper";
           else if (guest.rtt < 200) pingColor = "text-analog-amber";
           else pingColor = "text-analog-crimson";
         }
         
-        card.className = `flex flex-col p-4 rounded border ${cardBg} transition-all duration-300 bg-analog-panel`;
+        card.className = `flex flex-col p-3 rounded-lg ${rowBg} transition-colors duration-150`;
         card.innerHTML = `
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3 overflow-hidden">
@@ -3103,6 +3238,7 @@
           ${progressSection}
         `;
         rosterList.appendChild(card);
+        index++;
       }
     }
 
