@@ -305,7 +305,7 @@
           
           <!-- High-Contrast CRT Calibration Target for QR Code -->
           <div class="relative bg-white p-4 rounded-lg shadow-inner shadow-black/40 border border-analog-border/50 shrink-0">
-            <div id="qrcode" class="w-40 h-40"></div>
+            <div id="qrcode" class="w-40 h-40 flex items-center justify-center"></div>
           </div>
           
           <!-- Broadcast URL strip -->
@@ -1181,8 +1181,8 @@
           
           new QRCode(qrContainer, {
             text: shareUrl,
-            width: 128,
-            height: 128,
+            width: 160,
+            height: 160,
             colorDark : "#0a0a0f",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
