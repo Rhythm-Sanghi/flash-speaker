@@ -726,7 +726,7 @@
         credential: "openrelayproject"
       },
       {
-        urls: "turns:openrelay.metered.ca:443?transport=tcp",
+        urls: "turn:openrelay.metered.ca:443?transport=tcp",
         username: "openrelayproject",
         credential: "openrelayproject"
       }
@@ -1632,7 +1632,7 @@
         return;
       }
       
-      appState.peer = new Peer({
+      appState.peer = new Peer(undefined, {
         config: { iceServers: ICE_SERVERS },
         debug: 3
       });
@@ -1676,7 +1676,7 @@
           conn.close();
           handleFirstTimeJoinFailure();
         }
-      }, 10000);
+      }, 15000);
       
       conn.on('open', () => {
         clearTimeout(connTimeout);
@@ -1772,7 +1772,7 @@
       let connectTimeout = setTimeout(() => {
         conn.close();
         scheduleNextReconnect();
-      }, 5000);
+      }, 10000);
       
       conn.on('open', () => {
         clearTimeout(connectTimeout);
