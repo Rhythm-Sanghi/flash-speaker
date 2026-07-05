@@ -1515,8 +1515,22 @@
     }
 
     function connectToHostAsGuest() {
-      if (appState.peer) {
-        appState.peer.destroy();
+      if (appState.guestConn) {
+        try {
+          appState.guestConn.close();
+        } catch (e) {}
+        appState.guestConn = null;
+      }
+
+      if (appState.peer && !appState.peer.destroyed) {
+        if (appState.peer.open) {
+          attemptFirstTimeConnect();
+        } else {
+          appState.peer.once('open', () => {
+            attemptFirstTimeConnect();
+          });
+        }
+        return;
       }
       
       appState.peer = new Peer({
@@ -1734,7 +1748,7 @@
     function guestManualJoin() {
       const codeInput = document.getElementById('manualRoomCodeInput');
       if (!codeInput) return;
-      const code = codeInput.value.trim().toUpperCase();
+      const code = codeInput.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
       if (code.length !== 6) {
         showToast("Invalid Room Code. Must be exactly 6 characters.", "error");
         return;
