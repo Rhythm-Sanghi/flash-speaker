@@ -1802,6 +1802,7 @@
             setTimeout(() => {
               if (appState.playbackMode === 'youtube' && appState.ytPlayer) {
                 appState.ytPlayer.seekTo(message.expectedPlaybackPosition, true);
+                appState.ytPlayer.unMute();
                 appState.ytPlayer.playVideo();
                 appState.guestState = 'playing';
                 render();
@@ -1872,6 +1873,7 @@
           if (message.videoId === appState.trackId && appState.ytPlayer) {
             if (message.isPlaying) {
               appState.ytPlayer.seekTo(message.currentPosition, true);
+              appState.ytPlayer.unMute();
               appState.ytPlayer.playVideo();
               appState.guestState = 'playing';
             } else {
@@ -2176,6 +2178,7 @@
         setTimeout(() => {
           if (appState.playbackMode === 'youtube' && appState.ytPlayer) {
             appState.ytPlayer.seekTo(expectedPlaybackPosition, true);
+            appState.ytPlayer.unMute();
             appState.ytPlayer.playVideo();
             appState.isPlaying = true;
             appState.stateChangeWallTime = targetWallClockTime;
