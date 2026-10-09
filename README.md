@@ -1,37 +1,40 @@
 # Flash-Speaker
 
-Flash-Speaker is a real-time, low-latency multi-device audio broadcasting and synchronization platform. Built with vanilla Web Audio API, WebRTC, and NTP clock synchronization, it enables a Host device to stream audio or YouTube streams to multiple Guest devices simultaneously with sub-millisecond precision.
+A browser audio-sharing experiment with host and guest devices. It uses PeerJS
+for WebRTC connections, Web Audio for file playback, and the YouTube iframe
+player for video playback control.
 
-## 🎛️ Features
+## Try it
 
-* **Asymmetric Console Layout**: Designed like an analog telemetry deck with a glowing cathode-ray tube (CRT) signal visualizer.
-* **Precision Synchronization**: Uses NTP clock-sync algorithms and Scheduled Web Audio API buffer nodes to ensure all receivers play at the exact same wall-clock instant.
-* **Dual Playback Modes**:
-  * **File Mode**: Load local `.wav`, `.mp3`, or other audio files.
-  * **YouTube Stream Mode**: Synchronize audio from YouTube videos using the YouTube IFrame Player API.
-* **Telemetry Telemetry**: Monospace readouts for latency, room codes, offset timings, and connection states.
-* **Secure WebRTC Signaling**: Peer-to-peer transmission powered by PeerJS.
+For a desktop preview, run `python -m http.server 8080` from this directory and
+open http://localhost:8080. The page loads scripts from public CDNs.
 
-## 🚀 Getting Started
+For mobile guests, serve the site over HTTPS, for example with GitHub Pages.
+Use a recent browser with WebRTC and Web Audio support. A plain file URL or an
+HTTP address on another device is not the full secure-context setup. Browser
+audio permission, network restrictions and relay availability can affect use.
 
-Simply open `index.html` in any browser!
+1. On the host, choose **Source Protocol** and load a local audio file or YouTube URL.
+2. Select **Initialize Broadcast Room** and share its six-character ID or QR code.
+3. On each guest, choose **Guest Receiver**, enter the room ID and connect.
+4. Start playback from the host. The interface shows connection and timing status.
 
-> [!IMPORTANT]
-> Because WebRTC and secure media APIs require a secure context, this app **must** be hosted over HTTPS (e.g., GitHub Pages) to connect mobile guest devices.
+## Timing
 
-### Host Setup
-1. Open the page and select **Source Protocol** (File or YouTube).
-2. Load your media file or YouTube URL.
-3. Click **Initialize Broadcast Room** to get your 6-character Room ID and QR code.
-4. Share the ID or QR code with your guests.
+The app exchanges clock samples and schedules audio with Web Audio buffer
+nodes. It aims to align playback between devices; sub-millisecond accuracy and
+identical physical speaker output have not been established. Device output
+latency, browser scheduling, network conditions and YouTube player behavior can
+introduce drift. The displayed clock estimate is not a measurement of acoustic
+alignment at the speakers.
 
-### Guest Setup
-1. Select **Guest Receiver** mode on the landing page.
-2. Enter the Room ID (or scan the QR code).
-3. Connect and wait for the host to trigger playback.
+## Files
 
-## 🛠️ Tech Stack
-* HTML5 / Tailwind CSS
-* Vanilla ES6 JavaScript
-* WebRTC (via PeerJS)
-* Web Audio API
+- `index.html`: application interface and client logic.
+- `tools/turn_diagnostic.html`: connection diagnostic; open through the same
+  hosted origin at `/tools/turn_diagnostic.html`.
+- `tools/generate_beep.py`: generates a short WAV tone and prints its data URL.
+  Run it from a scratch directory; it creates `temp_beep.wav` in that directory.
+
+The interface uses a console-style layout with room, latency and connection
+readouts. There is no npm build step for the static page.
