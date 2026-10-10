@@ -1,0 +1,25 @@
+{
+  "name": "flash-speaker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared audio playback across nearby browser devices.",
+  "scripts": {
+    "format": "prettier --write index.html config.js package.json src relay scripts test README.md .github/workflows/deploy.yml",
+    "dev": "node scripts/build.js && node scripts/serve.js",
+    "build": "node scripts/build.js",
+    "test": "node --test",
+    "check": "node --check src/app.js && node --check src/transport.js && node --check src/audio.js && node --check relay/server.js && npm test && npm run build",
+    "relay": "node relay/server.js"
+  },
+  "dependencies": {
+    "html5-qrcode": "2.3.8",
+    "peerjs": "1.5.5",
+    "qrcode-generator": "2.0.4",
+    "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "prettier": "3.6.2"
+  }
+}
